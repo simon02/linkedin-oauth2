@@ -180,7 +180,7 @@ module LinkedIn
       path = "/companies"
 
       if domain = options.delete(:domain)
-        path += "?email-domain=#{CGI.escape(domain)}"
+        options['email_domain'] = CGI.escape(domain)
       elsif id = options.delete(:id)
         path += "/#{id}"
       elsif url = options.delete(:url)
@@ -188,10 +188,12 @@ module LinkedIn
       elsif name = options.delete(:name)
         path += "/universal-name=#{CGI.escape(name)}"
       elsif is_admin = options.delete(:is_admin)
-        path += "?is-company-admin=#{CGI.escape(is_admin)}"
+        options['is_company_admin'] = CGI.escape(is_admin)
       else
         path += "/~"
       end
+
+      path
     end
   end
 end

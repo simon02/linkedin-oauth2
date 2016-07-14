@@ -24,6 +24,16 @@ describe LinkedIn::Companies do
     expect(api.company(domain: "acme.com")).to be_an_instance_of(LinkedIn::Mash)
   end
 
+  it "should be able to get specific fields even when requesting by e-mail domain" do
+    stub("https://api.linkedin.com/v1/companies:(id,name,industry)?email-domain=acme.com&")
+    expect(api.company(domain: "acme.com", fields: %w{id name industry})).to be_an_instance_of(LinkedIn::Mash)
+  end
+
+  it "should be able to get specific fields even when requesting managed pages" do
+    stub("https://api.linkedin.com/v1/companies:(id,name,industry)?is-company-admin=true&")
+    expect(api.company(is_admin: 'true', fields: %w{id name industry})).to be_an_instance_of(LinkedIn::Mash)
+  end
+
   it "should load correct company data" do
     VCR.use_cassette("companies data") do
       data = api.company(id: 1586, fields: %w{ id name industry locations:(address:(city state country-code) is-headquarters) employee-count-range })
